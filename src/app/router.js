@@ -1,8 +1,16 @@
 import * as navigation from "../commands/navigation/index.js";
 import * as fileSystem from "../commands/file-system/index.js";
-// import * as compression from "../commands/compression/index.js";
-// import * as hash from "../commands/hash/index.js";
-// import * as osInfo from "../commands/os-info/index.js";
+import * as osInfo from "../commands/os-info/index.js";
+import * as hash from "../commands/hash/index.js";
+import * as compression from "../commands/compression/index.js";
+
+const osCommands = {
+  "--EOL": osInfo.printEOL,
+  "--cpus": osInfo.printCPUs,
+  "--homedir": osInfo.printHomedir,
+  "--username": osInfo.printUsername,
+  "--architecture": osInfo.printArchitecture,
+};
 
 const commandMap = {
   up: (currentDir) => navigation.upDir(currentDir),
@@ -15,6 +23,15 @@ const commandMap = {
   cp: (currentDir, args) => fileSystem.copyFile(currentDir, args[0], args[1]),
   mv: (currentDir, args) => fileSystem.moveFile(currentDir, args[0], args[1]),
   rm: (currentDir, args) => fileSystem.removeFile(currentDir, args[0]),
+  os: (_, args) => {
+    const handler = osCommands[args[0]];
+    handler ? handler() : console.log("Invalid input");
+  },
+  hash: (currentDir, args) => hash.calculateHash(currentDir, args[0]),
+  compress: (currentDir, args) =>
+    compression.compressFile(currentDir, args[0], args[1]),
+  decompress: (currentDir, args) =>
+    compression.decompressFile(currentDir, args[0], args[1]),
 };
 
 const parseArgs = (input) =>
