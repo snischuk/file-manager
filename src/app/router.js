@@ -1,21 +1,25 @@
-import { up } from "../commands/navigation/up.js";
-import { cd } from "../commands/navigation/cd.js";
-import { ls } from "../commands/navigation/ls.js";
-
-import { cat } from "../commands/file-system/cat.js";
-import { add } from "../commands/file-system/add.js";
+import * as navigation from "../commands/navigation/index.js";
+import * as fileSystem from "../commands/file-system/index.js";
+// import * as compression from "../commands/compression/index.js";
+// import * as hash from "../commands/hash/index.js";
+// import * as osInfo from "../commands/os-info/index.js";
 
 const commandMap = {
-  up: (currentDir) => up(currentDir),
-  cd: (currentDir, args) => cd(currentDir, args[0]),
-  ls: (currentDir) => ls(currentDir),
-  cat: (currentDir, args) => cat(currentDir, args[0]),
-  add: (currentDir, args) => add(currentDir, args[0]),
+  up: (currentDir) => navigation.upDir(currentDir),
+  cd: (currentDir, args) => navigation.changeDir(currentDir, args[0]),
+  ls: (currentDir) => navigation.list(currentDir),
+  cat: (currentDir, args) => fileSystem.readFile(currentDir, args[0]),
+  add: (currentDir, args) => fileSystem.createFile(currentDir, args[0]),
+  mkdir: (currentDir, args) => fileSystem.makeDir(currentDir, args[0]),
+  rn: (currentDir, args) => fileSystem.renameFile(currentDir, args[0], args[1]),
+  cp: (currentDir, args) => fileSystem.copyFile(currentDir, args[0], args[1]),
+  mv: (currentDir, args) => fileSystem.moveFile(currentDir, args[0], args[1]),
+  rm: (currentDir, args) => fileSystem.removeFile(currentDir, args[0]),
 };
 
 const parseArgs = (input) =>
-  [...input.matchAll(/[^\s"]+|"([^"]*)"/g)].map(
-    (match) => match[1] ?? match[0]
+  [...input.matchAll(/[^\s"']+|"([^"]*)"|'([^']*)'/g)].map(
+    (match) => match[1] ?? match[2] ?? match[0]
   );
 
 export const dispatchCommand = async (input, currentDir) => {

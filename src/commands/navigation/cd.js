@@ -2,7 +2,7 @@ import { resolve, isAbsolute, parse } from 'node:path';
 import { statSync } from 'node:fs';
 import { platform } from 'node:os';
 
-export const cd = (currentDir, targetPath) => {
+export const changeDir = (currentDir, targetPath) => {
   if (!targetPath) {
     console.log('Invalid input');
     return currentDir;

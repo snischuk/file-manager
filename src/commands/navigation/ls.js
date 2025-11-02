@@ -28,7 +28,7 @@ const getDirectoryContent = async (currentDir) => {
   return { directories, files };
 };
 
-export const ls = async (currentDir) => {
+export const list = async (currentDir) => {
   try {
     const content = await getDirectoryContent(currentDir);
 

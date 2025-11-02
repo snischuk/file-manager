@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export const add = async (currentDir, fileName) => {
+export const createFile = async (currentDir, fileName) => {
   if (!fileName) {
     console.log("Invalid input");
     return;
